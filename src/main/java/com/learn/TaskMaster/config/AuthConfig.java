@@ -23,7 +23,7 @@
             httpSecurity
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/api/register").permitAll()
+                            .requestMatchers("/api/register", "/api/verifyRegistration").permitAll()
                             .anyRequest().authenticated())
                     .formLogin(AbstractHttpConfigurer::disable)
                     .httpBasic(Customizer.withDefaults());
