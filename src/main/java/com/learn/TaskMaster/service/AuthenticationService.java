@@ -5,7 +5,9 @@ import com.learn.TaskMaster.entity.UserDTO;
 import com.learn.TaskMaster.entity.VerificationToken;
 import com.learn.TaskMaster.repository.TokenRepository;
 import com.learn.TaskMaster.repository.UserRepository;
+import com.learn.TaskMaster.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -71,5 +73,30 @@ public class AuthenticationService implements UserDetailsService {
         user.setEnabled(true);
         userRepository.save(user);
         tokenRepository.delete(verificationToken);
+    }
+
+    public String signinUser(UserDTO userDTO) {
+        String username = userDTO.getUserName();
+        String password = userDTO.getPassword();
+
+        // check if user is registered or not
+        User registeredUser = userRepository.findByUserName(username);
+        if (registeredUser == null) {
+            return "User is not registered in the system!!";
+        }
+
+        // Check if user is enabled
+        if (!registeredUser.isEnabled()) {
+            return "User is registered but not yet enabled. Please complete the verification";
+        }
+
+        // Verify the password
+        boolean isPasswordMatch = passwordEncoder.matches(password, registeredUser.getPassword());
+        if (!isPasswordMatch) {
+            return "Invalid credentials!";
+        }
+
+        // Everything is good... generate JWT token
+        return JwtUtil.generateToken(username, registeredUser.getRole());
     }
 }

@@ -37,4 +37,9 @@ public class AuthController {
         authenticationService.enableUser(token);
         return "User verified successfully";
     }
+
+    @PostMapping("/signin")
+    public String signin(@RequestBody UserDTO userDTO) {
+        return authenticationService.signinUser(userDTO);
+    }
 }
