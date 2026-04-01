@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Hello {
-    @GetMapping("/hello")
+    @GetMapping("/")
     public String healthCheck() {
         return "Welcome to Task Master Application!";
     }

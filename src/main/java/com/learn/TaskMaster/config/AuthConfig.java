@@ -23,10 +23,8 @@
             httpSecurity
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/api/register").permitAll()
-                            .anyRequest().authenticated())
-                    .formLogin(AbstractHttpConfigurer::disable)
-                    .httpBasic(Customizer.withDefaults());
+                            .requestMatchers("/api/register", "/api/verifyRegistration", "/api/signin").permitAll()
+                            .anyRequest().authenticated());
             return httpSecurity.build();
         }
     }
